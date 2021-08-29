@@ -1,3 +1,6 @@
+<!--  https://github.com/sveltecasts/svelte-youtube
+ Code mostly found here -->
+
 <script context="module">
   let YouTubeIframeAPIReady = false;
 </script>
@@ -9,10 +12,12 @@
 	export let  player;
 
   import { createEventDispatcher, onMount } from "svelte";
+import { claim_svg_element } from "svelte/internal";
   const dispatch = createEventDispatcher();
   let divId = "player_" + parseInt(Math.random() * 100000).toString();
 	
 
+  // TODO: Change height over to automatincally setting itse'f to the widest width
   export let videoId;
   export let height = "390";
   export let width = "640";
@@ -25,6 +30,8 @@
       var firstScriptTag = document.getElementsByTagName("script")[0];
       firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
     }
+
+
     window.onYouTubeIframeAPIReady = function() {
       //console.log('hello')
       window.dispatchEvent(new Event("YouTubeIframeAPIReady"));
@@ -36,6 +43,7 @@
         createPlayer();
       }
     });
+
     function createPlayer() {
       player = new YT.Player(divId, {
         height,
@@ -47,10 +55,12 @@
         }
       });
     }
+
     if (YouTubeIframeAPIReady) {
       createPlayer(); // if the YT Script is ready, we can create our player
-    }
+    } 
   });
+
   function isMyScriptLoaded(url = "") {
     var scripts = document.getElementsByTagName("script");
     for (var i = scripts.length; i--; ) {
@@ -61,6 +71,7 @@
 
 	// Updates the state for where we are up too
   function onPlayerStateChange({ data }) {
+    dispatch("StateChange", data);
 // What the data means
 		//-1 (unstarted)
 // 0 (ended)
@@ -68,16 +79,17 @@
 // 2 (paused)
 // 3 (buffering)
 // 5 (video cued).
-// Once the video is paused it gets the new time
-if (data === 2) {
-	playerTime = player.getCurrentTime()
-}
-	
-  
+
+    if (data === 2 || data === 1) {
+      playerTime = player.getCurrentTime()
+    }
   }
 
 </script>
 
-<div class="yt-component">
-  <div id={divId} />
-</div>
+
+  <div class="yt-component"  >
+    <div id={divId}  />
+  </div>
+
+
