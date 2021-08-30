@@ -1,3 +1,18 @@
+
+Little svelte app since I wanted a quicker way to create youtube chapters.
+It's deployed to vercel  [`Youtube chapter maker`](https://youtube-time-stamper-7n7et14w3-jarrodkane.vercel.app/)
+
+## Stuff todo
+ [x] Adding a time via youtube
+ [x] Ability to delete a chapter
+ [x] Deploy to vercel
+ [ ] Automatically force the first chapter to 00:00:00
+ [ ] Have the list organise itself in time order
+ [ ] Have a custom timebar to scroll through
+ [ ] Clean up of written chapters button
+
+
+
 # create-svelte
 
 Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte);
