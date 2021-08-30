@@ -4,6 +4,11 @@
 	import Youtube from '../components/Youtube.svelte';
 	import { formatTime } from '../helpers/formatTime';
 
+	import TextBoard from '../components/TextBoard.svelte';
+	import { v4 as uuidv4 } from 'uuid';
+
+
+
 	// STATE
 	let videoURL = '';
 	let videoId = 'UU7MgYIbtAk';
@@ -18,18 +23,19 @@
 		videoId = getVideoIdFromUrl(videoURL);
 	};
 
-	const getInformation = () => {
-		console.log(formatTime(playerTime));
+	const delteEntry = (id) => {
+		let curTimeBlocks = [...timeBlocks];
+		curTimeBlocks = curTimeBlocks.filter((time) => time.id === id);
+		timeBlocks = [...curTimeBlocks];
 	};
 
 	const addTimeCode = (e) => {
 		e.preventDefault();
-		console.log('testing');
 		let selectedTime = formatTime(playerTime);
 		let newTime = `${selectedTime} - ${title}`;
-		console.log(timeBlocks);
-		timeBlocks = [...timeBlocks, newTime];
-
+		let uuid = uuidv4();
+		let timeEntry = { id: uuid, chapter: newTime };
+		timeBlocks = [...timeBlocks, timeEntry];
 		title = '';
 	};
 </script>
@@ -38,42 +44,42 @@
 	<title>Youtube Time Code Maker</title>
 </svelte:head>
 
-<h1 class="text-3xl">Youtube Time Code Maker</h1>
 <div>
-  <p>Add in a youtube video, and then press enter</p>
-</div>
-<form on:submit={getVideo} class="pb-5">
-	<input
-		class="w-full rounded-md text-lg p-4 border-2 border-gray-200"
-		type="text"
-		bind:value={videoURL}
-		placeholder="Add in Youtube link"
-	/>
-</form>
+	<div class="py-5">
+		<p>Add in a youtube video, and then press enter</p>
 
-<div>
-  <h2 class="">Add in a title for the time stamp and hit enter</h2>
-</div>
-<form on:submit={addTimeCode}>
-	<input
-		class="w-full rounded-md text-lg p-4 border-2 border-gray-200"
-		type="text"
-		bind:value={title}
-		placeholder="Title"
-	/>
-</form>
+		<form on:submit={getVideo}>
+			<input
+				class="w-full rounded-md text-lg p-4 border-2 border-gray-200 bg-black text-gray-100 shadow-md"
+				type="text"
+				bind:value={videoURL}
+				placeholder="Add in Youtube link"
+			/>
+		</form>
+	</div>
 
-<div class="flex flex-col align-center items-center	">
+	<div class="py-5">
+		<h2 class="">Add in a title for the chapter, and hit enter</h2>
+
+		<form on:submit={addTimeCode}>
+			<div class="flex text-2xl font-light">
+				{formatTime(playerTime)}
+			</div>
+			<input
+				class="w-full rounded-md text-lg p-4 border-2 border-gray-200 bg-black text-gray-100 shadow-md"
+				type="text"
+				bind:value={title}
+				placeholder="Title"
+			/>
+		</form>
+	</div>
+</div>
+
+<div class="flex flex-col align-center items-center">
 	<!-- Recreates the video element for each new youtube video added  -->
 	{#key videoId}
 		<Youtube {videoId} bind:playerTime bind:player />
 	{/key}
 
-	<div class="w-full rounded-md text-lg p-4 border-2 border-gray-200">
-		{#each timeBlocks as cat}
-			<p>
-				{cat}
-			</p>
-		{/each}
-	</div>
+	<TextBoard bind:timeBlocks />
 </div>
