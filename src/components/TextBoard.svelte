@@ -1,5 +1,6 @@
 <script>
 	export let timeBlocks;
+	export let wipeChapters;
 
 	const delteEntry = (e) => {
 		let targetId = e.target.id;
@@ -9,6 +10,10 @@
 	};
 </script>
 
+<button
+	class="px-2 my-1 rounded-md bg-gray-200  text-red-500 hover:text-red-900 cursor-pointer font-semibold"
+	on:click={wipeChapters}>Remove all chapters</button
+>
 <div class="w-full flex">
 	<div
 		id="chapters"
@@ -22,9 +27,7 @@
 			</span>
 		{/each}
 	</div>
-	<div
-		class=" text-lg p-4  my-5"
-	>
+	<div class=" text-lg p-4  my-5">
 		{#each timeBlocks as time}
 			<div
 				id={time.id}

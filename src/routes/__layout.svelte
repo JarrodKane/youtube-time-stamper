@@ -4,7 +4,6 @@
   <div class="flex flex-col lg:flex-row  align-center align-center  justify-evenly">
     <slot></slot>
   </div>
-  
 </div>
 
 
