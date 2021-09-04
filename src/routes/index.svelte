@@ -5,6 +5,7 @@
 	import { formatTime } from '../helpers/formatTime';
 
 	import TextBoard from '../components/TextBoard.svelte';
+	import TimeEntry from '../components/TimeEntry.svelte';
 	import { v4 as uuidv4 } from 'uuid';
 
 
@@ -58,21 +59,8 @@
 		</form>
 	</div>
 
-	<div class="py-5">
-		<h2 class="">Add in a title for the chapter, and hit enter</h2>
+	<TimeEntry addTimeCode={addTimeCode} formatTime={formatTime} bind:playerTime bind:title/>
 
-		<form on:submit={addTimeCode}>
-			<div class="flex text-2xl font-light">
-				{formatTime(playerTime)}
-			</div>
-			<input
-				class="w-full rounded-md text-lg p-4 border-2 border-gray-200 bg-black text-gray-100 shadow-md"
-				type="text"
-				bind:value={title}
-				placeholder="Title"
-			/>
-		</form>
-	</div>
 </div>
 
 <div class="flex flex-col align-center items-center">
