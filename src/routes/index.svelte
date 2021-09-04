@@ -7,6 +7,7 @@
 	import TextBoard from '../components/TextBoard.svelte';
 	import TimeEntry from '../components/TimeEntry.svelte';
 	import { v4 as uuidv4 } from 'uuid';
+	import EditModal from '../components/EditModal.svelte';
 
 	// STATE
 	let videoURL = '';
@@ -14,7 +15,10 @@
 	let player;
 	let title = '';
 	let timeBlocks = [];
-	let currentTime = { hours: 0, mins: 0, secs: 0 };
+	let currentTime = { hrs: 0, mins: 0, secs: 0 };
+	let editing = false;
+	let editTime = { hrs: 0, mins: 0, secs: 0 };
+	let editTitle = '';
 
 	// Grabs the video ID and passes that to the video player to set the video we want to timecode for
 	const getVideo = (e) => {
@@ -25,44 +29,57 @@
 
 	const reset = () => {
 		title = '';
-		currentTime = { hours: 0, mins: 0, secs: 0 };
+		currentTime = { hrs: 0, mins: 0, secs: 0 };
 	};
 
-	const updateTime = (t, type) => {
-		if (type === 'Youtube') {
-			let { hours, mins, secs } = formatTime(t);
-			currentTime = { hours: hours, mins: mins, secs: secs };
+	// Selects an entry to edit
+	const editChapter = (e) => {
+		let targetId = e.target.id;
+		let editBlock = timeBlocks.find((chapter) => chapter.id === targetId);
+		editTime = editBlock.time;
+		// currentTime = { hrs: hrs, mins: mins, secs: secs }
+		editTitle = editBlock.title;
+		editing = true;
+	};
+
+	// This is hit on input change or when someone starts or pauses the youtube video
+	const updateTime = (t, caller, type) => {
+		if (caller === 'Youtube') {
+			let { hrs, mins, secs } = formatTime(t);
+			currentTime = { hrs: hrs, mins: mins, secs: secs };
+		} else if (caller === 'Editing') {
+			editTime[type] = t;
 		} else {
 			currentTime[type] = t;
 		}
 	};
 
-	const delteEntry = (id) => {
-		let curTimeBlocks = [...timeBlocks];
-		curTimeBlocks = curTimeBlocks.filter((time) => time.id === id);
-		timeBlocks = [...curTimeBlocks];
-	};
-
-	const editEntry = (id) => {
-		let curTimeBlocks = [...timeBlocks];
-		curTimeBlocks = curTimeBlocks.filter((time) => time.id === id);
-		timeBlocks = [...curTimeBlocks];
-	};
-
-	const wipeChapters = () =>{
+	const wipeChapters = () => {
 		timeBlocks = [];
-	}
+	};
 
 	const addTimeCode = (e) => {
 		e.preventDefault();
-		let stringHours = String(currentTime.hours).padStart(2, '0');
-		let stringMins = String(currentTime.mins).padStart(2, '0');
-		let stringSecs = String(currentTime.secs).padStart(2, '0');
-		let newTime = `${stringHours}:${stringMins}:${stringSecs} - ${title}`;
-		let uuid = uuidv4();
-		let timeEntry = { id: uuid, chapter: newTime };
-		timeBlocks = [...timeBlocks, timeEntry];
-		reset();
+		if (editing) {
+		} else {
+			let uuid = uuidv4();
+			let timeEntry = {
+				id: uuid,
+				time: currentTime,
+				title: title,
+				stringTime: creatString(currentTime)
+			};
+			timeBlocks = [...timeBlocks, timeEntry];
+			reset();
+		}
+	};
+
+	const creatString = (time) => {
+		let stringhrs = String(time.hrs).padStart(2, '0');
+		let stringMins = String(time.mins).padStart(2, '0');
+		let stringSecs = String(time.secs).padStart(2, '0');
+		let ret = `${stringhrs}:${stringMins}:${stringSecs}`;
+		return ret;
 	};
 </script>
 
@@ -84,6 +101,10 @@
 		</form>
 	</div>
 
+	{#if editing}
+		<EditModal {updateTime} bind:editTitle bind:editTime bind:editing/>
+	{/if}
+
 	<TimeEntry {addTimeCode} {updateTime} bind:currentTime bind:title />
 </div>
 
@@ -93,5 +114,5 @@
 		<Youtube {videoId} {updateTime} bind:player />
 	{/key}
 
-	<TextBoard bind:timeBlocks {wipeChapters}/>
+	<TextBoard bind:timeBlocks {wipeChapters} {editChapter} />
 </div>

@@ -4,7 +4,7 @@ export const formatTime = (time) => {
 	let secs = ~~time % 60;
 
 	let ret = {
-		hours: hrs,
+		hrs: hrs,
 		mins: mins,
 		secs: secs
 	};
