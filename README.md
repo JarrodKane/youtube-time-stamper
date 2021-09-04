@@ -6,6 +6,10 @@ It's deployed to vercel  [`Youtube chapter maker`](https://youtube-time-stamper-
  [x] Adding a time via youtube
  [x] Ability to delete a chapter
  [x] Deploy to vercel
+ [x] Ability to manually input chapters
+ [x] Ability to manually delate chapters
+ [ ] Ability to manually edit chapters
+ [ ] Hook in youtube APIJS calls
  [ ] Automatically force the first chapter to 00:00:00
  [ ] Have the list organise itself in time order
  [ ] Have a custom timebar to scroll through
