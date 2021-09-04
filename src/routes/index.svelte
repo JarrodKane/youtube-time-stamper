@@ -17,8 +17,11 @@
 	let timeBlocks = [];
 	let currentTime = { hrs: 0, mins: 0, secs: 0 };
 	let editing = false;
+
+	// TODO: Move all the edit options into a single object
 	let editTime = { hrs: 0, mins: 0, secs: 0 };
 	let editTitle = '';
+	let editId = -1;
 
 	// Grabs the video ID and passes that to the video player to set the video we want to timecode for
 	const getVideo = (e) => {
@@ -37,8 +40,8 @@
 		let targetId = e.target.id;
 		let editBlock = timeBlocks.find((chapter) => chapter.id === targetId);
 		editTime = editBlock.time;
-		// currentTime = { hrs: hrs, mins: mins, secs: secs }
 		editTitle = editBlock.title;
+		editId = targetId;
 		editing = true;
 	};
 
@@ -58,8 +61,17 @@
 		timeBlocks = [];
 	};
 
+	const addUpdate = (e) => {
+		let objIndex = timeBlocks.findIndex((obj) => obj.id == editId);
+		timeBlocks[objIndex].time = editTime;
+		timeBlocks[objIndex].title = editTitle;
+		timeBlocks[objIndex].stringTime = creatString(editTime);
+
+		editing = false;
+	};
+
 	const addTimeCode = (e) => {
-		e.preventDefault();
+		// e.preventDefault();
 		if (editing) {
 		} else {
 			let uuid = uuidv4();
@@ -81,6 +93,23 @@
 		let ret = `${stringhrs}:${stringMins}:${stringSecs}`;
 		return ret;
 	};
+
+	const submitUpdate = (e) => {
+		let isEditForm = e.target.classList.contains('edit-form');
+		if (isEditForm) {
+			if (e.charCode === 13) {
+				addUpdate();
+			} else if (e.target.type === 'submit') {
+				addUpdate();
+			}
+		} else {
+			if (e.charCode === 13) {
+				addTimeCode();
+			} else if (e.target.type === 'submit') {
+				addTimeCode();
+			}
+		}
+	};
 </script>
 
 <svelte:head>
@@ -93,7 +122,7 @@
 
 		<form on:submit={getVideo}>
 			<input
-				class="w-full rounded-md text-lg p-4 border-2 border-gray-200 bg-black text-gray-100 shadow-md"
+				class="w-full rounded-md text-lg p-4 border-2 border-gray-200 bg-gray-900 text-gray-100 shadow-md"
 				type="text"
 				bind:value={videoURL}
 				placeholder="Add in Youtube link"
@@ -102,10 +131,10 @@
 	</div>
 
 	{#if editing}
-		<EditModal {updateTime} bind:editTitle bind:editTime bind:editing/>
+		<EditModal {updateTime} {addUpdate} {submitUpdate} bind:editTitle bind:editTime bind:editing />
 	{/if}
 
-	<TimeEntry {addTimeCode} {updateTime} bind:currentTime bind:title />
+	<TimeEntry {updateTime} {submitUpdate} bind:currentTime bind:title />
 </div>
 
 <div class="flex flex-col align-center items-center">
