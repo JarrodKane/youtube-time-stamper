@@ -32,7 +32,8 @@
 
 	const reset = () => {
 		title = '';
-		currentTime = { hrs: 0, mins: 0, secs: 0 };
+		console.log(timeBlocks)
+		// currentTime = timeBlocks[timeBlocks.length].currentTime;
 	};
 
 	// Selects an entry to edit
@@ -51,8 +52,8 @@
 			let { hrs, mins, secs } = formatTime(t);
 			currentTime = { hrs: hrs, mins: mins, secs: secs };
 		} else if (caller === 'Editing') {
-			editTime[type] = t;
-		} else {
+			// editTime[type] = t;
+		} else if (caller === 'Main') {
 			currentTime[type] = t;
 		}
 	};
@@ -62,7 +63,7 @@
 	};
 
 	const addUpdate = (e) => {
-		let objIndex = timeBlocks.findIndex((obj) => obj.id == editId);
+		let objIndex = timeBlocks.findIndex((obj) => obj.id === editId);
 		timeBlocks[objIndex].time = editTime;
 		timeBlocks[objIndex].title = editTitle;
 		timeBlocks[objIndex].stringTime = creatString(editTime);
@@ -72,12 +73,12 @@
 
 	const addTimeCode = (e) => {
 		// e.preventDefault();
-		if (editing) {
-		} else {
+		let {hrs, mins, secs} = currentTime
+		{
 			let uuid = uuidv4();
 			let timeEntry = {
 				id: uuid,
-				time: currentTime,
+				time: { hrs: hrs, mins: mins, secs: secs },
 				title: title,
 				stringTime: creatString(currentTime)
 			};
@@ -97,23 +98,23 @@
 	const submitUpdate = (e) => {
 		let isEditForm = e.target.classList.contains('edit-form');
 		if (isEditForm) {
+			console.log("Added")
 			if (e.charCode === 13) {
 				addUpdate();
 			} else if (e.target.type === 'submit') {
 				addUpdate();
 			}
 		} else {
+			
 			if (e.charCode === 13) {
 				addTimeCode();
-			} else if (e.target.type === 'submit') {
-				addTimeCode();
-			}
+			} 
 		}
 	};
 </script>
 
 <svelte:head>
-	<title>Youtube Time Code Maker</title>
+	<title>Youtube Chapter Maker</title>
 </svelte:head>
 
 <div>

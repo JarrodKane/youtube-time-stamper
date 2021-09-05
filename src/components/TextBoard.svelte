@@ -1,7 +1,6 @@
 <script>
 	export let timeBlocks;
 	export let wipeChapters;
-	export let selectEntry;
 	export let editChapter;
 
 	const delteEntry = (e) => {

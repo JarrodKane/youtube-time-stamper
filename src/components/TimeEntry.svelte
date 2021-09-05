@@ -20,7 +20,7 @@
 		<input
 			name="hrs"
 			type="number"
-			class="w-3/12 rounded-md text-lg p-4 border-2 border-gray-200 bg-gray-900 text-gray-100 shadow-md"
+			class="time-form w-3/12 rounded-md text-lg p-4 border-2 border-gray-200 bg-gray-900 text-gray-100 shadow-md"
 			min="0"
 			max="20"
 			bind:value={currentTime.hrs}
@@ -30,7 +30,7 @@
 		<input
 			name="mins"
 			type="number"
-			class="w-3/12 rounded-md text-lg p-4 border-2 border-gray-200 bg-gray-900 text-gray-100 shadow-md"
+			class="time-form w-3/12 rounded-md text-lg p-4 border-2 border-gray-200 bg-gray-900 text-gray-100 shadow-md"
 			min="0"
 			max="60"
 			bind:value={currentTime.mins}
@@ -40,7 +40,7 @@
 		<input
 			name="secs"
 			type="number"
-			class="w-3/12 rounded-md text-lg p-4 border-2 border-gray-200 bg-gray-900 text-gray-100 shadow-md"
+			class="time-form w-3/12 rounded-md text-lg p-4 border-2 border-gray-200 bg-gray-900 text-gray-100 shadow-md"
 			min="0"
 			max="60"
 			bind:value={currentTime.secs}
@@ -50,7 +50,7 @@
 
 		<div class="flex text-2xl font-light" />
 		<input
-			class="w-full rounded-md text-lg p-4 border-2 border-gray-200 bg-gray-900 text-gray-100 shadow-md"
+			class="time-form w-full rounded-md text-lg p-4 border-2 border-gray-200 bg-gray-900 text-gray-100 shadow-md"
 			type="text"
 			bind:value={title}
 			placeholder="Title"

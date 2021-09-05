@@ -11,6 +11,8 @@
 		}
 	};
 
+
+
 	const checkNumber = (e) => {
 		let time = e.target.value;
 		let type = e.target.name;
@@ -38,7 +40,7 @@
 			class="edit-form w-3/12 rounded-md text-lg p-4 border-2 border-gray-200 bg-gray-900 text-gray-100 shadow-md"
 			min="0"
 			max="20"
-			value={editTime.hrs}
+			bind:value={editTime.hrs}
 			on:input={checkNumber}
 			on:keypress={submitUpdate}
 		/>
@@ -48,7 +50,7 @@
 			class="edit-form w-3/12 rounded-md text-lg p-4 border-2 border-gray-200 bg-gray-900 text-gray-100 shadow-md"
 			min="0"
 			max="60"
-			value={editTime.mins}
+			bind:value={editTime.mins}
 			on:input={checkNumber}
 			on:keypress={submitUpdate}
 		/>
@@ -58,7 +60,7 @@
 			class="edit-form w-3/12 rounded-md text-lg p-4 border-2 border-gray-200 bg-gray-900 text-gray-100 shadow-md"
 			min="0"
 			max="60"
-			value={editTime.secs}
+			bind:value={editTime.secs}
 			on:input={checkNumber}
 			on:keypress={submitUpdate}
 		/>
