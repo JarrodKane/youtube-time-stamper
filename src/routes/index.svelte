@@ -9,6 +9,8 @@
 	import { v4 as uuidv4 } from 'uuid';
 	import EditModal from '../components/EditModal.svelte';
 
+	import VMplayer from '../components/VMplayer.svelte';
+
 	// STATE
 	let videoURL = '';
 	let videoId = 'UU7MgYIbtAk';
@@ -32,7 +34,7 @@
 
 	const reset = () => {
 		title = '';
-		console.log(timeBlocks)
+		console.log(timeBlocks);
 		// currentTime = timeBlocks[timeBlocks.length].currentTime;
 	};
 
@@ -73,11 +75,12 @@
 
 	const addTimeCode = (e) => {
 		// e.preventDefault();
-		let {hrs, mins, secs} = currentTime
+		let { hrs, mins, secs } = currentTime;
 		{
 			let uuid = uuidv4();
 			let timeEntry = {
 				id: uuid,
+				// time: currentTime,
 				time: { hrs: hrs, mins: mins, secs: secs },
 				title: title,
 				stringTime: creatString(currentTime)
@@ -98,17 +101,16 @@
 	const submitUpdate = (e) => {
 		let isEditForm = e.target.classList.contains('edit-form');
 		if (isEditForm) {
-			console.log("Added")
+			console.log('Added');
 			if (e.charCode === 13) {
 				addUpdate();
 			} else if (e.target.type === 'submit') {
 				addUpdate();
 			}
 		} else {
-			
 			if (e.charCode === 13) {
 				addTimeCode();
-			} 
+			}
 		}
 	};
 </script>
@@ -138,11 +140,11 @@
 	<TimeEntry {updateTime} {submitUpdate} bind:currentTime bind:title />
 </div>
 
-<div class="flex flex-col align-center items-center">
-	<!-- Recreates the video element for each new youtube video added  -->
-	{#key videoId}
+<div class="flex flex-col align-center items-center ">
+	<VMplayer {videoId}  />
+	<!-- {#key videoId}
 		<Youtube {videoId} {updateTime} bind:player />
-	{/key}
+	{/key} -->
 
 	<TextBoard bind:timeBlocks {wipeChapters} {editChapter} />
 </div>
